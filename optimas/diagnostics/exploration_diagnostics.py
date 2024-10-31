@@ -974,7 +974,7 @@ class ExplorationDiagnostics:
         parameter: str,
         minimize: Optional[bool] = None,
         fit_out_of_design: Optional[bool] = False,
-        drop_nan = False,
+        drop_nan = True,
     ) -> AxModelManager:
         """Build a GP model of the specified parameter.
 
@@ -994,7 +994,8 @@ class ExplorationDiagnostics:
             if the range of parameter has been reduced during the optimization.
             By default, False.
         drop_nan : bool, optional
-            Whether to entries in the history with NaN values.
+            Whether to drop entries in the history with NaN values.
+            By default, True.
 
         Returns
         -------
