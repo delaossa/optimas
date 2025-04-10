@@ -994,7 +994,7 @@ class ExplorationDiagnostics:
             if the range of parameter has been reduced during the optimization.
             By default, False.
         drop_nan : bool, optional
-            Whether to entries in the history with NaN values.
+            Whether to drop entries in the history with NaN values.
 
         Returns
         -------
