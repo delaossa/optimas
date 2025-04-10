@@ -1,6 +1,17 @@
 """Contains the definition of the AxModelManager class."""
 
-from typing import Optional, Union, List, Tuple, Dict, Any, Literal
+from __future__ import annotations
+
+from typing import (
+    Optional,
+    Union,
+    List,
+    Tuple,
+    Dict,
+    Any,
+    Literal,
+    TYPE_CHECKING,
+)
 
 import numpy as np
 from numpy.typing import NDArray
@@ -33,6 +44,10 @@ except ImportError:
 
 from optimas.core import VaryingParameter, Objective
 from optimas.utils.other import convert_to_dataframe
+
+if TYPE_CHECKING:
+    from ax.service.ax_client import AxClient
+    from ax.modelbridge.torch import TorchModelBridge
 
 
 class AxModelManager:
@@ -130,7 +145,7 @@ class AxModelManager:
         # allow calling `model.predict`. Using MOO for multiobjective is
         # needed because otherwise calls to `get_pareto_optimal_parameters`
         # would fail.
-        model = Models.GPEI if len(objectives) == 1 else Models.MOO
+        model = Models.BOTORCH_MODULAR
         gs = GenerationStrategy([GenerationStep(model=model, num_trials=-1)])
         ax_client = AxClient(generation_strategy=gs, verbose_logging=False)
         ax_client.create_experiment(
