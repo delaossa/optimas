@@ -974,6 +974,7 @@ class ExplorationDiagnostics:
         parameter: str,
         minimize: Optional[bool] = None,
         fit_out_of_design: Optional[bool] = False,
+        drop_nan = True,
     ) -> AxModelManager:
         """Build a GP model of the specified parameter.
 
@@ -992,6 +993,9 @@ class ExplorationDiagnostics:
             outside of the range of the varying parameters. This can be useful
             if the range of parameter has been reduced during the optimization.
             By default, False.
+        drop_nan : bool, optional
+            Whether to drop entries in the history with NaN values.
+            By default, True.
 
         Returns
         -------
@@ -1020,9 +1024,14 @@ class ExplorationDiagnostics:
                 dtype=analyzed_parameter.dtype,
             )
 
+        if drop_nan:
+            source = self.history.dropna()
+        else:
+            source = self.history
+
         # Initialize `AxModelManager` with history dataframe.
         return AxModelManager(
-            source=self.history,
+            source=source,
             varying_parameters=self.varying_parameters,
             objectives=[objective],
             fit_out_of_design=fit_out_of_design,
